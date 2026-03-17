@@ -1,0 +1,45 @@
+---
+- name: Check if Oh My Zsh is installed
+  ansible.builtin.stat:
+    path: "/home/{{ zsh_user }}/.oh-my-zsh"
+  register: omz_exists
+
+- name: Remove Oh My Zsh
+  ansible.builtin.file:
+    path: "/home/{{ zsh_user }}/.oh-my-zsh"
+    state: absent
+  when: omz_exists.stat.exists
+
+- name: Remove .zshrc
+  ansible.builtin.file:
+    path: "/home/{{ zsh_user }}/.zshrc"
+    state: absent
+
+- name: Reset default shell to bash for {{ zsh_user }}
+  ansible.builtin.user:
+    name: "{{ zsh_user }}"
+    shell: /bin/bash
+
+- name: Remove zsh from /etc/shells
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: /bin/zsh
+    state: absent
+
+- name: Remove zsh (Fedora / RHEL / CentOS)
+  ansible.builtin.dnf:
+    name: zsh
+    state: absent
+  when: ansible_os_family == "RedHat"
+
+- name: Remove zsh (Debian / Ubuntu)
+  ansible.builtin.apt:
+    name: zsh
+    state: absent
+  when: ansible_os_family == "Debian"
+
+- name: Remove zsh (Arch Linux)
+  community.general.pacman:
+    name: zsh
+    state: absent
+  when: ansible_os_family == "Archlinux"

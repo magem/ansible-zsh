@@ -1,0 +1,4 @@
+---
+- name: Confirm zsh registered
+  ansible.builtin.debug:
+    msg: "zsh was added to /etc/shells at {{ zsh_path.stdout }}"

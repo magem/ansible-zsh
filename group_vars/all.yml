@@ -1,0 +1,5 @@
+zsh_action: install
+zsh_set_default_shell: true
+install_oh_my_zsh: true
+zsh_user: "{{ ansible_env.SUDO_USER | default(ansible_env.USER) }}"
+zsh_zshrc_source: ""        # path to a local .zshrc file, e.g. "files/.zshrc"

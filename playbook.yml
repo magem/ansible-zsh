@@ -1,0 +1,6 @@
+---
+- name: Install and configure zsh
+  hosts: all
+  become: true
+  roles:
+    - zsh
